@@ -1,0 +1,33 @@
+name: Continuous Deployment
+
+on:
+  release:
+    types:
+    - published
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 15
+        registry-url: https://registry.npmjs.org
+    - name: Run actions/setup
+      run: npm install --no-package-lock
+    - name: Run actions/build
+      run: |
+        make -e DSTDIR=${GITHUB_WORKSPACE}/dist build
+        npm -C ${GITHUB_WORKSPACE}/dist install --no-package-lock
+      env:
+        NODE_ENV: production
+    - name: Run actions/release
+      run: npm publish --access public ${GITHUB_WORKSPACE}/dist
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Run actions/release
+      run: npm publish --access public ${GITHUB_WORKSPACE}/dist
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

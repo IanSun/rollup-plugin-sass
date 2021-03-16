@@ -1,0 +1,19 @@
+env:
+  node: true
+
+extends:
+- plugin:@ian-sun/all
+
+overrides:
+- extends:
+  - plugin:@ian-sun/typescript/all
+  files:
+  - "*.ts"
+  rules:
+    "@typescript-eslint/no-type-alias":
+    - error
+    - allowAliases: always
+
+rules:
+  sort-keys:
+  - off
