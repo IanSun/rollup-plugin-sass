@@ -27,7 +27,3 @@ jobs:
       run: npm publish --access public ${GITHUB_WORKSPACE}/dist
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-    - name: Run actions/release
-      run: npm publish --access public ${GITHUB_WORKSPACE}/dist
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
