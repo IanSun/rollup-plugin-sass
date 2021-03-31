@@ -31,12 +31,10 @@ export default function (options = {}) {
     name: "sass",
     async load (id) {
       if (filter(id)) {
-        const css = await compile(
+        const css = await compile.call(
+          this,
           id,
-          {
-            functions: options.functions,
-            importer: createImporter(this),
-          },
+          { functions: options.functions },
         );
         const result = transform(css.code, id);
 
@@ -77,6 +75,7 @@ export default function (options = {}) {
 }
 
 /**
+ * @this {import("rollup").PluginContext}
  * @param {string} id
  * @param {import("sass").Options} options
  * @return {Promise<import("rollup").SourceDescription>}
@@ -89,12 +88,17 @@ async function compile (id, options) {
     data: await readFile(id, "utf8"),
     fiber: Fiber,
     file: id,
+    importer: createImporter.call(this),
     linefeed: "lf",
     omitSourceMapUrl: true,
     outFile: id,
     sourceMap: true,
     sourceMapRoot: sourceRoot,
   });
+
+  for (const id of result.stats.includedFiles) {
+    this.addWatchFile(id);
+  }
 
   const map = JSON.parse(result.map.toString());
 
@@ -108,12 +112,12 @@ async function compile (id, options) {
 }
 
 /**
- * @param {import("rollup").PluginContext} context
+ * @this {import("rollup").PluginContext}
  * @return {import("sass").Options["importer"]}
  */
-function createImporter (context) {
-  return function (source, importer, next) {
-    context
+function createImporter () {
+  return (source, importer, next) => {
+    this
       .resolve(source, importer)
       .then(
         resolution =>
