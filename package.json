@@ -1,6 +1,6 @@
 {
   "name": "@ian-sun/rollup-plugin-sass",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Rollup plugin for seamless integration between Rollup and Sass.",
   "bugs": "https://github.com/IanSun/rollup-plugin-sass/issues",
   "license": "MIT",
@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@rollup/pluginutils": "^4.0.0",
-    "@types/node": "^14.0.0",
     "@types/sass": "^1.0.0",
     "fibers": "^5.0.0",
     "sass": "^1.0.0",
@@ -29,7 +28,6 @@
   },
   "bundledDependencies": [
     "@rollup/pluginutils",
-    "@types/node",
     "@types/sass",
     "fibers",
     "sass",
